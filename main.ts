@@ -3,6 +3,8 @@ input.onButtonPressed(Button.A, function () {
 })
 let new_Y = 0
 let new_X = 0
+let send = 0
+let prev_send = 0
 let offsetPitch = 20
 radio.setGroup(5)
 let X = 2
@@ -38,11 +40,14 @@ basic.forever(function () {
         led.unplot(X, Y)
         X = new_X
         Y = new_Y
-        if (input.buttonIsPressed(Button.A)) {
-            radio.sendNumber(5 * Y + X)
-        } else {
-            radio.sendNumber((5 * Y + X) * -1)
-        }
+        send = 5 * Y + X
+    }
+    if (!(input.buttonIsPressed(Button.A))) {
+        send = -1
+    }
+    if (prev_send != send) {
+        radio.sendNumber(send)
+        prev_send = send
     }
     basic.pause(200)
 })
